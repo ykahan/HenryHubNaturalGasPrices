@@ -2,7 +2,6 @@ import time
 from selenium import webdriver
 import shutil
 import pandas as pd
-import xlrd as xl
 
 source = "C:\\Users\\USER\\Java_Workspace_Yehoshua\\Selenium Dependencies"
 source += "\\chromedriver.exe"
