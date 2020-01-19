@@ -1,5 +1,6 @@
 import shutil
 import time
+from os import path, remove, rename
 
 import pandas as pd
 from selenium import webdriver
@@ -37,7 +38,7 @@ driver.quit()
 
 downloadsPath = "C:\\Users\\USER\\Downloads\\"
 annualDataName = "RNGWHHDa"
-monthlyDataName = "RNGWHHDm (1)"
+monthlyDataName = "RNGWHHDm"
 weeklyDataName = "RNGWHHDw"
 dailyDataName = "RNGWHHDd"
 
@@ -45,24 +46,47 @@ names = [annualDataName, monthlyDataName, weeklyDataName, dailyDataName]
 
 for name in names:
     excel = name + ".xls"
+    newExcel = ""
     if name.endswith("a"):
+        newExcel = "annual.xls"
         csv = "annual"
     elif name.endswith("w"):
+        newExcel = "weekly.xls"
         csv = "weekly"
     elif name.endswith("d"):
+        newExcel = "daily.xls"
         csv = "daily"
     else:
+        newExcel = "monthly.xls"
         csv = "monthly"
     csv += ".csv"
 
     source = downloadsPath + excel
-    destExcel = "C:\\Users\\USER\\Documents\\Yehoshua\\Programming\\Python\\HenryHubNaturalGasPricesOld\\XlsFiles\\"
-    shutil.move(source, destExcel)
+    destinationExcel = "C:\\Users\\USER\\Documents\\Yehoshua\\Programming\\Python\\HenryHubNaturalGasPricesOld" \
+                       "\\XlsFiles\\"
+    destinationCsv = "C:\\Users\\USER\\Documents\\Yehoshua\\Programming\\Python\\HenryHubNaturalGasPricesOld" \
+                     "\\CsvFiles\\"
 
-    destCsv = "C:\\Users\\USER\\Documents\\Yehoshua\\Programming\\Python\\HenryHubNaturalGasPricesOld\\CsvFiles\\"
+    excelPath = destinationExcel + "\\" + excel
+    newExcelPath = destinationExcel + "\\" + newExcel
+    csvPath = destinationCsv + csv
 
-    excelPath = destExcel + "\\" + excel
-    csvPath = destCsv + csv
+    excelPathExists = path.exists(excelPath)
+    newExcelPathExists = path.exists(newExcelPath)
+    csvPathExists = path.exists(csvPath)
 
-    read_file = pd.read_excel(excelPath, "Data 1")
+    if excelPathExists:
+        remove(excelPath)
+
+    shutil.move(source, destinationExcel)
+
+    if newExcelPathExists:
+        remove(newExcelPath)
+
+    rename(excelPath, newExcelPath)
+    read_file = pd.read_excel(newExcelPath, "Data 1")
+
+    if csvPathExists:
+        remove(csvPath)
+
     read_file.to_csv(csvPath, index=None, header=True)
