@@ -18,54 +18,12 @@ def prepare_driver(path_to_chromedriver, seconds):
     return drive
 
 
-source = "C:\\Users\\USER\\Java_Workspace_Yehoshua\\Selenium Dependencies"
-source += "\\chromedriver.exe"
-wait = 10
-
-driver = prepare_driver(source, wait)
-
-target = "http://www.eia.gov/dnav/ng/hist/rngwhhdm.htm"
-driver.get(target)
-
-dailyPricesXpath = "//a[contains(@href, 'whhdD') and contains(@class, 'Nav')]"
-weeklyPricesXpath = "//a[contains(@href, 'whhdW') and contains(@class, 'Nav')]"
-monthlyPricesXpath = "//a[contains(@href, 'whhdM') and contains(@class, 'Nav')]"
-yearlyPricesXpath = "//a[contains(@href, 'whhdA') and contains(@class, 'Nav')]"
-
-downloadsPath = "C:\\Users\\USER\\Downloads\\"
-commonName = "RNGWHH"
-
-remove_files(downloadsPath, commonName)
-
-datasets = [dailyPricesXpath, weeklyPricesXpath, monthlyPricesXpath, yearlyPricesXpath]
-
-
 def download_file(xpath):
     download_link = driver.find_element_by_xpath(xpath)
     download_link.click()
 
 
-for dataset in datasets:
-    target = driver.find_element_by_xpath(dataset)
-    target.click()
-
-    downloadXpath = "//a[contains(text(), 'Download')]"
-    download_file(downloadXpath)
-
-    time.sleep(5)
-
-driver.quit()
-
-annualDataName = "RNGWHHDa"
-monthlyDataName = "RNGWHHDm"
-weeklyDataName = "RNGWHHDw"
-dailyDataName = "RNGWHHDd"
-
-old_names = [annualDataName, monthlyDataName, weeklyDataName, dailyDataName]
-
-
 def get_file_names(old_name):
-    # global excel, newExcel, csv
     exc = old_name + ".xls"
     if old_name.endswith("a"):
         new_excel = "annual.xls"
@@ -100,6 +58,47 @@ def convert_from_xls_to_csv(local_excel, local_sheet, csv_path):
     read_file.to_csv(csv_path, index=None, header=True)
 
 
+source = "C:\\Users\\USER\\Java_Workspace_Yehoshua\\Selenium Dependencies"
+source += "\\chromedriver.exe"
+wait = 10
+
+driver = prepare_driver(source, wait)
+
+url = "http://www.eia.gov/dnav/ng/hist/rngwhhdm.htm"
+driver.get(url)
+
+downloadsPath = "C:\\Users\\USER\\Downloads\\"
+commonName = "RNGWHH"
+
+remove_files(downloadsPath, commonName)
+
+dailyPricesXpath = "//a[contains(@href, 'whhdD') and contains(@class, 'Nav')]"
+weeklyPricesXpath = "//a[contains(@href, 'whhdW') and contains(@class, 'Nav')]"
+monthlyPricesXpath = "//a[contains(@href, 'whhdM') and contains(@class, 'Nav')]"
+yearlyPricesXpath = "//a[contains(@href, 'whhdA') and contains(@class, 'Nav')]"
+
+datasets = [dailyPricesXpath, weeklyPricesXpath, monthlyPricesXpath, yearlyPricesXpath]
+
+
+for dataset in datasets:
+    url = driver.find_element_by_xpath(dataset)
+    url.click()
+
+    downloadXpath = "//a[contains(text(), 'Download')]"
+    download_file(downloadXpath)
+
+    time.sleep(5)
+
+driver.quit()
+
+annualDataName = "RNGWHHDa"
+monthlyDataName = "RNGWHHDm"
+weeklyDataName = "RNGWHHDw"
+dailyDataName = "RNGWHHDd"
+
+old_names = [annualDataName, monthlyDataName, weeklyDataName, dailyDataName]
+
+
 for name in old_names:
     new_names = get_file_names(name)
     excel = new_names[0]
@@ -110,23 +109,23 @@ for name in old_names:
     destinationExcel = "C:\\Users\\USER\\Documents\\Yehoshua\\Programming\\Python\\HenryHubNaturalGasPricesOld" \
                        "\\XlsFiles\\"
 
-    excelPath = destinationExcel + "\\" + excel
-    newExcelPath = destinationExcel + "\\" + newExcel
+    oldNameExcelPath = destinationExcel + "\\" + excel
+    newNameExcelPath = destinationExcel + "\\" + newExcel
 
     destinationCsv = "C:\\Users\\USER\\Documents\\Yehoshua\\Programming\\Python\\HenryHubNaturalGasPricesOld" \
                      "\\CsvFiles\\"
     csvPath = destinationCsv + csv
 
-    excelPathExists = path.exists(excelPath)
-    newExcelPathExists = path.exists(newExcelPath)
+    oldNameExcelPathExists = path.exists(oldNameExcelPath)
+    newNameExcelPathExists = path.exists(newNameExcelPath)
     csvPathExists = path.exists(csvPath)
 
-    move_file(excelPathExists, source, excelPath)
+    move_file(oldNameExcelPathExists, source, oldNameExcelPath)
 
-    rename_file(newExcelPathExists, excelPath, newExcelPath)
+    rename_file(newNameExcelPathExists, oldNameExcelPath, newNameExcelPath)
 
     if csvPathExists:
         remove(csvPath)
 
     sheet = "Data 1"
-    convert_from_xls_to_csv(newExcelPath, sheet, csvPath)
+    convert_from_xls_to_csv(newNameExcelPath, sheet, csvPath)
