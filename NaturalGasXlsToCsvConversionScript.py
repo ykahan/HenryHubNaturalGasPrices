@@ -1,6 +1,6 @@
 import shutil
 import time
-from os import path, remove, rename
+from os import path, remove, rename, listdir
 
 import pandas as pd
 from selenium import webdriver
@@ -22,6 +22,13 @@ weeklyPrices = driver.find_element_by_xpath(weeklyPricesXpath)
 monthlyPrices = driver.find_element_by_xpath(monthlyPricesXpath)
 yearlyPrices = driver.find_element_by_xpath(yearlyPricesXpath)
 
+downloadsPath = "C:\\Users\\USER\\Downloads\\"
+
+for file in listdir(downloadsPath):
+    if file.startswith("RNGWHH"):
+        remove(file)
+        print("removed a file")
+
 datasets = [dailyPricesXpath, weeklyPricesXpath, monthlyPricesXpath, yearlyPricesXpath]
 for dataset in datasets:
     target = driver.find_element_by_xpath(dataset)
@@ -35,8 +42,6 @@ for dataset in datasets:
 
 url = driver.current_url
 driver.quit()
-
-downloadsPath = "C:\\Users\\USER\\Downloads\\"
 annualDataName = "RNGWHHDa"
 monthlyDataName = "RNGWHHDm"
 weeklyDataName = "RNGWHHDw"
