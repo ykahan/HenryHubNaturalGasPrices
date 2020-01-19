@@ -69,6 +69,10 @@ def download_all_datasets(array):
         time.sleep(5)
 
 
+def remove_file(path_exists, local_path):
+    if path_exists:
+        remove(local_path)
+
 source = "C:\\Users\\USER\\Java_Workspace_Yehoshua\\Selenium Dependencies"
 source += "\\chromedriver.exe"
 wait = 10
@@ -99,12 +103,6 @@ weeklyDataName = "RNGWHHDw"
 dailyDataName = "RNGWHHDd"
 
 old_names = [annualDataName, monthlyDataName, weeklyDataName, dailyDataName]
-
-
-def remove_file(path_exists, local_path):
-    if path_exists:
-        remove(local_path)
-
 
 for name in old_names:
     new_names = get_file_names(name)
