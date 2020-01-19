@@ -1,7 +1,8 @@
-import time
-from selenium import webdriver
 import shutil
+import time
+
 import pandas as pd
+from selenium import webdriver
 
 source = "C:\\Users\\USER\\Java_Workspace_Yehoshua\\Selenium Dependencies"
 source += "\\chromedriver.exe"
