@@ -7,7 +7,7 @@ from selenium import webdriver
 
 source = "C:\\Users\\USER\\Java_Workspace_Yehoshua\\Selenium Dependencies"
 source += "\\chromedriver.exe"
-driver = webdriver.Chrome(source)  # Optional argument, if not specified will search path.
+driver = webdriver.Chrome(source)
 target = "http://www.eia.gov/dnav/ng/hist/rngwhhdm.htm"
 driver.implicitly_wait(10)
 driver.get(target)
@@ -27,7 +27,6 @@ downloadsPath = "C:\\Users\\USER\\Downloads\\"
 for file in listdir(downloadsPath):
     if file.startswith("RNGWHH"):
         remove(file)
-        print("removed a file")
 
 datasets = [dailyPricesXpath, weeklyPricesXpath, monthlyPricesXpath, yearlyPricesXpath]
 for dataset in datasets:
