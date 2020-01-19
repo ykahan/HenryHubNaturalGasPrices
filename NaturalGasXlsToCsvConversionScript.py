@@ -58,6 +58,17 @@ def convert_from_xls_to_csv(local_excel, local_sheet, csv_path):
     read_file.to_csv(csv_path, index=None, header=True)
 
 
+def download_all_datasets(array):
+    for dataset in array:
+        target_element = driver.find_element_by_xpath(dataset)
+        target_element.click()
+
+        download_xpath = "//a[contains(text(), 'Download')]"
+        download_file(download_xpath)
+
+        time.sleep(5)
+
+
 source = "C:\\Users\\USER\\Java_Workspace_Yehoshua\\Selenium Dependencies"
 source += "\\chromedriver.exe"
 wait = 10
@@ -78,16 +89,7 @@ monthlyPricesXpath = "//a[contains(@href, 'whhdM') and contains(@class, 'Nav')]"
 yearlyPricesXpath = "//a[contains(@href, 'whhdA') and contains(@class, 'Nav')]"
 
 datasets = [dailyPricesXpath, weeklyPricesXpath, monthlyPricesXpath, yearlyPricesXpath]
-
-
-for dataset in datasets:
-    url = driver.find_element_by_xpath(dataset)
-    url.click()
-
-    downloadXpath = "//a[contains(text(), 'Download')]"
-    download_file(downloadXpath)
-
-    time.sleep(5)
+download_all_datasets(datasets)
 
 driver.quit()
 
@@ -97,6 +99,11 @@ weeklyDataName = "RNGWHHDw"
 dailyDataName = "RNGWHHDd"
 
 old_names = [annualDataName, monthlyDataName, weeklyDataName, dailyDataName]
+
+
+def remove_file(path_exists, local_path):
+    if path_exists:
+        remove(local_path)
 
 
 for name in old_names:
@@ -112,9 +119,8 @@ for name in old_names:
     oldNameExcelPath = destinationExcel + "\\" + excel
     newNameExcelPath = destinationExcel + "\\" + newExcel
 
-    destinationCsv = "C:\\Users\\USER\\Documents\\Yehoshua\\Programming\\Python\\HenryHubNaturalGasPricesOld" \
-                     "\\CsvFiles\\"
-    csvPath = destinationCsv + csv
+    csvPath = "C:\\Users\\USER\\Documents\\Yehoshua\\Programming\\Python\\HenryHubNaturalGasPricesOld" \
+              "\\CsvFiles\\" + csv
 
     oldNameExcelPathExists = path.exists(oldNameExcelPath)
     newNameExcelPathExists = path.exists(newNameExcelPath)
@@ -124,8 +130,7 @@ for name in old_names:
 
     rename_file(newNameExcelPathExists, oldNameExcelPath, newNameExcelPath)
 
-    if csvPathExists:
-        remove(csvPath)
+    remove_file(csvPathExists, csvPath)
 
     sheet = "Data 1"
     convert_from_xls_to_csv(newNameExcelPath, sheet, csvPath)
