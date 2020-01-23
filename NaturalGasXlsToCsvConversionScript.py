@@ -73,6 +73,7 @@ def remove_file(path_exists, local_path):
     if path_exists:
         remove(local_path)
 
+
 source = "C:\\Users\\USER\\Java_Workspace_Yehoshua\\Selenium Dependencies"
 source += "\\chromedriver.exe"
 wait = 10
